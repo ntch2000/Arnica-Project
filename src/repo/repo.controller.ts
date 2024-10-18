@@ -1,7 +1,10 @@
 import { Controller, Get, Param } from '@nestjs/common';
+import { RepoService } from './repo.service';
 
 @Controller('repo')
 export class RepoController {
+
+    constructor(private readonly repoService: RepoService){}
 /*
     routes that we need
 
@@ -11,8 +14,7 @@ export class RepoController {
 
 @Get(':url')
 fetchRepoInfo(@Param('url') url: string) {
-    return {name: url, description: 'description', defaultBranch: 'default branch', lastCommit: 'last commit'
-    }
+    return this.repoService.fetchRepoInfo(url)
 
 }
 
