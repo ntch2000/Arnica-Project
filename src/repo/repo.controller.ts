@@ -1,4 +1,4 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param, Query } from '@nestjs/common';
 import { RepoService } from './repo.service';
 
 @Controller('repo')
@@ -12,9 +12,10 @@ export class RepoController {
 
 */
 
-@Get(':url')
-fetchRepoInfo(@Param('url') url: string) {
-    return this.repoService.fetchRepoInfo(url)
+@Get()
+fetchRepoInfo( ) {
+
+    return this.repoService.fetchRepoInfo()
 
 }
 
