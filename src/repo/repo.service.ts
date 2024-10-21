@@ -1,43 +1,36 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
-import { map } from 'rxjs';
+import { map, Observable } from 'rxjs';
 
 @Injectable()
 export class RepoService {
   constructor(private readonly httpService: HttpService) {}
 
-  private readonly gitAPIUrl = 'https://api.github.com/repos'; //url for the github api
+  //private readonly gitAPIUrl = 'https://api.github.com/repos'; //url for the github api
 
   // https://{owner}.github.io/{reponame}
-  // will need to extract owner and name from url
+  // will need to extract owner and name from url via regex
 
-  private repository = [
-    {
-      name: 'repo1',
-      description: 'test data repo description',
-      defaultBranch: 'main',
-      lastCommit: 'today',
-    },
-    {
-      name: 'repo2',
-      description: 'test data repo description for two',
-      defaultBranch: 'main',
-      lastCommit: '1300',
-    },
-    {
-      name: 'repo3',
-      description: 'test data repo description  for 3',
-      defaultBranch: 'main',
-      lastCommit: 'yesterday',
-    },
-  ];
+  private parseUrl(gitUrl: string): {owner: string, repoName: string}{
+    const regex = /github\.com\/([^\/]+)\/([^\/]+)/;
+    const match = gitUrl.match(regex);
 
-  fetchRepoInfo() {
-    const url = 'https://api.github.com/repos/ntch2000/neilgandhi-portfolio';
-    console.log(url);
+    // checks to see if the url matches git format and extracts the owner (match group 1) and the repo (match group 2)
+    if (match && match[1] && match[2]) {
+        return {owner: match[1], repoName: match[2]};
+    }
+
+    throw new Error('Not a git URL')
+  }
+
+
+  fetchRepoInfo(url): Observable<any> {
+    const {owner, repoName} = this.parseUrl(url); 
+    const gitUrl = `https://api.github.com/repos/${owner}/${repoName}`;
+    
     // 'https://api.github.io/ntch2000/arnica-project'
     return this.httpService
-    .get(url)
+    .get(gitUrl)
     .pipe(
         map((response) => response.data),
     map((data) => ({

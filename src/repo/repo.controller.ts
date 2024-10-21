@@ -1,5 +1,6 @@
 import { Controller, Get, Param, Query } from '@nestjs/common';
 import { RepoService } from './repo.service';
+import { Observable } from 'rxjs';
 
 @Controller('repo')
 export class RepoController {
@@ -13,10 +14,10 @@ export class RepoController {
 */
 
 @Get()
-fetchRepoInfo( ) {
-
-    return this.repoService.fetchRepoInfo()
-
+fetchRepoInfo(@Query('url') url: string) {
+    
+    //return this.repoService.fetchRepoInfo('https://github.com/ntch2000/neilgandhi-portfolio')
+    return this.repoService.fetchRepoInfo(url)
 }
 
 }
