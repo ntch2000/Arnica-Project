@@ -14,7 +14,7 @@ export class RepoController {
 */
 
 @Get()
-fetchRepoInfo(@Query('url') url: string) {
+fetchRepoInfo(@Query('url') url: string): Observable<any>{
     
     //return this.repoService.fetchRepoInfo('https://github.com/ntch2000/neilgandhi-portfolio')
     return this.repoService.fetchRepoInfo(url)

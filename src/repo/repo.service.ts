@@ -1,6 +1,8 @@
 import { HttpService } from '@nestjs/axios';
-import { Injectable } from '@nestjs/common';
-import { map, Observable } from 'rxjs';
+import { Injectable, Options } from '@nestjs/common';
+import { response } from 'express';
+import { basename } from 'path';
+import { map, Observable, switchMap } from 'rxjs';
 
 @Injectable()
 export class RepoService {
@@ -26,18 +28,34 @@ export class RepoService {
 
   fetchRepoInfo(url): Observable<any> {
     const {owner, repoName} = this.parseUrl(url); 
-    const gitUrl = `https://api.github.com/repos/${owner}/${repoName}`;
+    const gitUrl = `https://api.github.com/repos/${owner}/${repoName}`; //sets url for the github api call
     
-    // 'https://api.github.io/ntch2000/arnica-project'
-    return this.httpService
-    .get(gitUrl)
-    .pipe(
-        map((response) => response.data),
-    map((data) => ({
-        name: data.name,
-        description: data.description,
-        default_branch: data.default_branch,
 
-    })));
-  }
-}
+    const basicRepoInfo = this.httpService.get(gitUrl).pipe(map(response => response.data)) // api call to obtain the basic repo info
+
+   
+    // obtains the commit information from the data obtained from the previous api call
+    return basicRepoInfo.pipe(
+        switchMap(repoData => {
+            const commitURL = `https://api.github.com/repos/${owner}/${repoName}/commits/${repoData.default_branch}`;
+            return this.httpService.get(commitURL).pipe(
+                map(commitURLResponse => {
+                    const commitInfo = commitURLResponse.data;
+
+                    // returning the final object with the basic repository information and last commit date on the default branch
+                    return {
+                        name: repoData.name,
+                        description: repoData.description,
+                        defaultBranch: repoData.default_branch,
+                        lastCommitDate: commitInfo.commit.author.date
+                    }
+                })
+            )
+        })
+
+        
+    ) 
+    
+
+  
+  }}
