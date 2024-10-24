@@ -6,8 +6,8 @@ export class GitleaksController {
     constructor(private readonly gitLeaksService: GitleaksService) {}
 
     @Get('scan')
-    async scanRepo(){
-        return await this.gitLeaksService.scanRepo()
+    async scanRepo(@Query('url') url: string): Promise<any>{
+        return await this.gitLeaksService.scanRepo(url)
         
         
     }
