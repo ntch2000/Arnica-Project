@@ -1,11 +1,12 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
-import { RepoService } from './repo.service';
+import { Controller, Get, Query } from '@nestjs/common';
+import { RepoSelectorService } from './repo-selector.service';
 import { Observable } from 'rxjs';
+
 
 @Controller('repo')
 export class RepoController {
 
-    constructor(private readonly repoService: RepoService){}
+    constructor(private readonly repoSelectorService: RepoSelectorService){}
 /*
     routes that we need
 
@@ -16,8 +17,8 @@ export class RepoController {
 @Get()
 fetchRepoInfo(@Query('url') url: string): Observable<any>{
     
-    //return this.repoService.fetchRepoInfo('https://github.com/ntch2000/neilgandhi-portfolio')
-    return this.repoService.fetchRepoInfo(url)
+    const repoService = this.repoSelectorService.getRepoService(url)
+    return repoService.fetchRepoInfo(url)
 }
 
 }

@@ -3,9 +3,11 @@ import { Injectable, Options } from '@nestjs/common';
 import { response } from 'express';
 import { basename } from 'path';
 import { map, Observable, switchMap } from 'rxjs';
+import { RepoService } from './repo.service.interface';
 
+// service to obtain repo information from github
 @Injectable()
-export class RepoService {
+export class GithubService implements RepoService {
   constructor(private readonly httpService: HttpService) {}
 
   //private readonly gitAPIUrl = 'https://api.github.com/repos'; //url for the github api
@@ -13,7 +15,7 @@ export class RepoService {
   // https://{owner}.github.io/{reponame}
   // will need to extract owner and name from url via regex
 
-  private parseUrl(gitUrl: string): {owner: string, repoName: string}{
+  parseUrl(gitUrl: string): {owner: string, repoName: string}{
     const regex = /github\.com\/([^\/]+)\/([^\/]+)/;
     const match = gitUrl.match(regex);
 
@@ -22,11 +24,11 @@ export class RepoService {
         return {owner: match[1], repoName: match[2]};
     }
 
-    throw new Error('Not a git URL')
+    throw new Error('Not a github URL')
   }
 
 
-  fetchRepoInfo(url): Observable<any> {
+  fetchRepoInfo(url: string): Observable<any> {
     const {owner, repoName} = this.parseUrl(url); 
     const gitUrl = `https://api.github.com/repos/${owner}/${repoName}`; //sets url for the github api call
     
