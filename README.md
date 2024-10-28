@@ -1,38 +1,19 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Arnica Project - SCM Security Analysis API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## Project Overview
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+This is a sample assignment for Arnica that accepts a git url and fetches basic repository information as well as security vulnerabilities via Gitleaks and outputs the results to a json report.
 
-## Description
+## Table of Contents
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- [Setup Instructions](#project-setup)
+- [Compile and Run the project](#compile-and-run-the-project)
 
 ## Project setup
 
 ```bash
 $ npm install
 ```
-
-## Compile and run the project
 
 ```bash
 # development
@@ -45,41 +26,42 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
-## Run tests
+## API Documentation
 
-```bash
-# unit tests
-$ npm run test
+The project has 2 main API endpoints based on the requirements as follows:
 
-# e2e tests
-$ npm run test:e2e
+### Git Repo Basic Information Endpoint
 
-# test coverage
-$ npm run test:cov
-```
+There is one Source Code Management (SCM) Repository supported in the current version of this project, but the code is written to easily allow for additional SCMs to be added.
 
-## Resources
+The Github repository endpoint is at **_https://localhost:3000/repo?url=https://github.com/{owner}/{repository}_**. This endpoint will fetch the basic information about the repository including the name, description, default branch, and the last commit information of the repository. This information is returned directly and not output to the report as I was not able to complete that but would be something that I would like to add. This would allow for a single report to be generated as an output for both the basic repo and security scan.
 
-Check out a few resources that may come in handy when working with NestJS:
+### Security Scanner Endpoint
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+There is one security scanner endpoint implemented in this version of the code. The only support scanner is Gitleaks.
 
-## Support
+The scan repository endpoint is at **_https://localhost:3000/scan?url=https://github.com/{owner}/{repository}_**. This endpoint will clone the repo in a temporary directory, run the scan using the Gitleaks CLI, delete the repo and finally output the results to a json report titled **{repository}-report.json**.
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+## Development Notes
 
-## Stay in touch
+### Project Thoughts
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+This was a challenge as I have never worked with Nest.js in the past. A lot of the decisions made during my development of the API was based on information learned as I went as well as online tutorials and resources. The main goal was to just get a working project with the thought of optimization after the basic functionality was completed. This means some of the code may not be the best optimized as that would happen at a later stage. The biggest challenge of the project was working within my time constraints as I only had about 1 - 2 hours a night to both learn and execute on the project.
 
-## License
+### Unit Tests
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+Unit tests were not created due to time constraints and the use of a new framework. In an ideal situation I would create unit tests to ensure proper code coverage but due to this assignment requiring a lot of learning in a short time frame, I decided to forgo unit tests.
+
+### Code Abstraction and Scaling
+
+I began work on abstracting the code to easily scale up the amount of support SCM Repositories and Scanners. I was able to complete the code for implementing multiple SCMs but creating an interface service as well as a selector service that would allow for adding additional repositories. I would do the same for the scanners but was not able to complete it due to time constraints.
+
+Additionally I would want to structure the output report a little better by ensuring both endpoints output to a single report file and the information was formatted nicely to be easily read and acted upon.
+
+### Containerization and CI/CD Pipeline
+
+Containerizing the code would be the next major feature I would want to work on. This would be the last part of the project I would focus on to ensure feature functionality was complete error-free. Although containerization is something I have experience in due to my past work, I was unable to complete due to time constraints.
+
+## Final thoughts
+
+This was a very interesting project to work on and I feel like I learned a lot. I would love to keep improving on this (time permitting) and gain more expertise in Nest.js. I have work with Node and Express in the past and I feel that Nest.js make creating API and working with endpoints so much easier than the former. This has definitely been a great experience for me and I hope to gain more knowledge and expertise in the future.
